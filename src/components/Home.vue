@@ -123,7 +123,10 @@
 			</div>
 		</div>
 		<div class="footer">
-			<div class="footer-item">关于</div>
+			<div class="footer-item">
+				<span class="footer-item-title">关于</span>
+				<span class="footer-item-link"><router-link to="/aboutUs">关于我们</router-link></span>
+			</div>
 			<div class="footer-item">帮助</div>
 			<div class="footer-item">友情链接</div>
 			<div class="footer-item">关注我们</div>
@@ -249,6 +252,11 @@ export default {
 				list-style: none;
 				padding-right: 20px;
 				float: left;
+
+				a {
+					text-decoration: none;
+					color: white;
+				}
 			}
 		}
 	}
@@ -464,6 +472,22 @@ export default {
 		.footer-item {
 			width: 19%;
 			float: left;
+			text-align: center;
+
+			.footer-item-title {
+				display: block;
+				padding: 10px;
+			}
+
+			.footer-item-link {
+				display: block;
+				font-size: 18px;
+
+				a {
+					text-decoration: none;
+					color: white;
+				}
+			}
 		}
 
 		.footer-QR-code {
