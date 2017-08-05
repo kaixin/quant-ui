@@ -1,21 +1,7 @@
 <template>
 	<div>
-		<div class="header">
-			<div class="quant-menu">
-				<div class="quant-menu-logo-wrapper">
-					<img class="quant-menu-logo" :src="logoImage">
-				</div>
-				<div class="quant-menu-items">
-					<ul>
-						<li>首页</li>
-						<li><router-link to="/AIadvisor">智能投顾</router-link></li>
-						<li>AI社区</li>
-						<li>清华量协</li>
-						<li>个人账号</li>
-					</ul>
-				</div>
-			</div>
-		</div>
+		<nav-bar :navMenuItems="homeMenu"></nav-bar>
+
 		<div class="main">
 			<div class="ad-pane">
 				<div style="display: inline-block; text-align: center; float: left; width: 60%; padding-left: 100px;">
@@ -122,36 +108,30 @@
 				</div>
 			</div>
 		</div>
-		<div class="footer">
-			<div class="footer-item">
-				<span class="footer-item-title">关于</span>
-				<span class="footer-item-link"><router-link to="/aboutUs">关于我们</router-link></span>
-			</div>
-			<div class="footer-item">帮助</div>
-			<div class="footer-item">友情链接</div>
-			<div class="footer-item">关注我们</div>
-			<div class="footer-QR-code">
-				<div style="margin-right: 20px; float: left;">
-					<img src="/static/we-chat.png">
-					<span>微信公众号</span>
-				</div>
-				<div style="float: left;">
-					<img src="/static/qq.png">
-					<span>QQ群</span>
-				</div>
-				
-			</div>
-		</div>
+
+		<footer-bar></footer-bar>
 	</div>
 </template>
 
 <script>
-// import logo from "../assets/logo.png"
+import NavBar from "@/components/layout/NavBar"
+import FooterBar from "@/components/layout/FooterBar"
+
 export default {
+	components: {
+		NavBar,
+		FooterBar
+	},
 	name: "home",
 	data() {
 		return {
-			logoImage: "/static/logo.png",
+			homeMenu: [
+				{title: "首页", link: "/", selected: true},
+				{title: "智能投顾", link: "/AIadvisor", selected: false},
+				{title: "AI社区", link: "", selected: false},
+				{title: "清华量协", link: "", selected: false},
+				{title: "个人账号", link: "", selected: false}
+			],
 			ourServices: [
 				{
 					name: "高质量数据",
@@ -223,48 +203,6 @@ export default {
 </script>
 
 <style lang="scss">
-	.header{
-		font-size: 21px;
-		padding-left: 100px;
-		padding-right: 50px;
-		background-color: #378DE5;
-
-		.quant-menu {
-			height: 70px;
-		}
-
-		.quant-menu-logo-wrapper {
-			display: inline-block;
-			float: left;
-		}
-
-		.quant-menu-logo {
-			height: 60px;
-			width: 60px;
-		}
-
-		.quant-menu-items {
-			color: white;
-			display: inline-block;
-			float: right;
-
-			ul li {list-style: none;
-				padding-right: 20px;
-				float: left;
-				cursor: pointer;
-
-				&:hover {
-					opacity: 0.5;
-				}
-
-				a {
-					text-decoration: none;
-					color: white;
-				}
-			}
-		}
-	}
-
 	.main {
 		background-color: #F2F3F7;
 
@@ -462,46 +400,6 @@ export default {
 				font-size: 36px;
 				text-align: center;
 				font-weight: normal;
-			}
-		}
-	}
-
-	.footer {
-		background-color: #040C36;
-		font-size: 26px;
-		height: 130px;
-		color: white;
-		padding: 30px 50px;
-
-		.footer-item {
-			width: 19%;
-			float: left;
-			text-align: center;
-
-			.footer-item-title {
-				display: block;
-				padding: 10px;
-			}
-
-			.footer-item-link {
-				display: block;
-				font-size: 18px;
-
-				a {
-					text-decoration: none;
-					color: white;
-				}
-			}
-		}
-
-		.footer-QR-code {
-			width: 24%;
-			float: left;
-			font-size: 14px;
-
-			span{
-				display: block;
-				text-align: center;
 			}
 		}
 	}
