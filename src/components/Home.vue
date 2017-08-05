@@ -8,7 +8,7 @@
 				<div class="quant-menu-items">
 					<ul>
 						<li>首页</li>
-						<li>智能投顾</li>
+						<li><router-link to="/AIadvisor">智能投顾</router-link></li>
 						<li>AI社区</li>
 						<li>清华量协</li>
 						<li>个人账号</li>
@@ -248,10 +248,14 @@ export default {
 			display: inline-block;
 			float: right;
 
-			ul li {
-				list-style: none;
+			ul li {list-style: none;
 				padding-right: 20px;
 				float: left;
+				cursor: pointer;
+
+				&:hover {
+					opacity: 0.5;
+				}
 
 				a {
 					text-decoration: none;
