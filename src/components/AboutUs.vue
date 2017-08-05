@@ -1,21 +1,6 @@
 <template>
 	<div id="about-us">
-		<div class="header">
-			<div class="quant-menu">
-				<div class="quant-menu-logo-wrapper">
-					<img class="quant-menu-logo" :src="logoImage">
-				</div>
-				<div class="quant-menu-items">
-					<ul>
-						<li>公司介绍</li>
-						<li>产品介绍</li>
-						<li>特色</li>
-						<li>联系方式</li>
-						<li><router-link to="/">返回</router-link></li>
-					</ul>
-				</div>
-			</div>
-		</div>
+		<nav-bar :navMenuItems="aboutUsMenu"></nav-bar>
 
 		<div class="main">
 			<div class="banner-pane">
@@ -60,36 +45,29 @@
 				</div>
 			</div>
 		</div>
-
-		<div class="footer">
-			<div class="footer-item">
-				<span class="footer-item-title">关于</span>
-				<span class="footer-item-link"><router-link to="/aboutUs">关于我们</router-link></span>
-			</div>
-			<div class="footer-item">帮助</div>
-			<div class="footer-item">友情链接</div>
-			<div class="footer-item">关注我们</div>
-			<div class="footer-QR-code">
-				<div style="margin-right: 20px; float: left;">
-					<img src="/static/we-chat.png">
-					<span>微信公众号</span>
-				</div>
-				<div style="float: left;">
-					<img src="/static/qq.png">
-					<span>QQ群</span>
-				</div>
-				
-			</div>
-		</div>
+		<footer-bar></footer-bar>
 	</div>
 </template>
 
 <script>
+import NavBar from "@/components/layout/NavBar"
+import FooterBar from "@/components/layout/FooterBar"
 export default {
+	components: {
+		NavBar,
+		FooterBar
+	},
 	name: "AboutUs",
 	data() {
 		return {
-			logoImage: "/static/logo.png"
+			logoImage: "/static/logo.png",
+			aboutUsMenu: [
+				{title: "公司介绍", selected: false},
+				{title: "产品介绍", selected: false},
+				{title: "特色", selected: false},
+				{title: "联系方式", selected: false},
+				{title: "返回", link: "/", selected: false}
+			]
 		};
 	}
 }
