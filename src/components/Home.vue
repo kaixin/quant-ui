@@ -127,7 +127,7 @@ export default {
 		return {
 			homeMenu: [
 				{title: "首页", link: "/", selected: true},
-				{title: "智能投顾", link: "/AIadvisor", selected: false},
+				{title: "智能投顾", link: "/AIadvisor/assetsSteward", selected: false},
 				{title: "AI社区", link: "", selected: false},
 				{title: "清华量协", link: "", selected: false},
 				{title: "个人账号", link: "", selected: false}
