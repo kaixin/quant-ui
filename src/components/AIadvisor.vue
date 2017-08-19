@@ -7,7 +7,7 @@
 
 				<el-col :span="3">
 					<el-menu default-active="AssetsSteward" class="AI-nav-menu">
-						<el-menu-item class="font-21" v-for="item in AIadvisorLeftMenu" :key="item.index" :index="item.index">
+						<el-menu-item class="font-18" v-for="item in AIadvisorLeftMenu" :key="item.index" :index="item.index">
 							<router-link v-text="item.title" :to="item.index"></router-link>
 						</el-menu-item>
 					</el-menu>
@@ -38,7 +38,13 @@ export default {
 			AIadvisorMenu: [
 				{title: "首页", link: "/", selected: false},
 				{title: "智能投顾", link: "/AIadvisor/assetsSteward", selected: true},
-				{title: "AI社区", link: "", selected: false},
+				{title: "AI社区",
+					link: "",
+					selected: false,
+					subMenus: [
+						{title: "我的策略", link: "/AICommunity/myStrategy"}
+					]
+				},
 				{title: "清华量协", link: "", selected: false},
 				{title: "个人账号", link: "", selected: false}
 			],
@@ -71,10 +77,6 @@ export default {
 					color: #20a0ff;
 				}
 			}		
-		}
-
-		.font-21 {
-			font-size: 21px;
 		}
 
 		.font-18 {
