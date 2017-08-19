@@ -128,7 +128,13 @@ export default {
 			homeMenu: [
 				{title: "首页", link: "/", selected: true},
 				{title: "智能投顾", link: "/AIadvisor/assetsSteward", selected: false},
-				{title: "AI社区", link: "", selected: false},
+				{title: "AI社区",
+					link: "",
+					selected: false,
+					subMenus: [
+						{title: "我的策略", link: "/AICommunity/myStrategy"}
+					]
+				},
 				{title: "清华量协", link: "", selected: false},
 				{title: "个人账号", link: "", selected: false}
 			],
