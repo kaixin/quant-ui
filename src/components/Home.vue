@@ -122,6 +122,9 @@ export default {
 		NavBar,
 		FooterBar
 	},
+	mounted() {
+		document.body.style.overflow = "auto";
+	},
 	name: "home",
 	data() {
 		return {

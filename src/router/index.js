@@ -14,6 +14,8 @@ import Strategist from '@/components/views/AIadvisor/Strategist'
 import CustomBuilt from '@/components/views/AIadvisor/CustomBuilt'
 
 import MyStrategy from '@/components/views/AICommunity/MyStrategy'
+import FuncLib from '@/components/views/AICommunity/MyStrategy/FuncLib'
+import StrategyAPI from '@/components/views/AICommunity/MyStrategy/StrategyAPI'
 
 Vue.use(Router)
 Vue.use(ElementUI)
@@ -63,6 +65,17 @@ export default new Router({
       path: '/AICommunity/myStrategy',
       name: 'MyStrategy',
       component: MyStrategy
+      
+    },
+    {
+      path: '/AICommunity/myStrategy/funcLib',
+      name: 'FuncLib',
+      component: FuncLib
+    },
+    {
+      path: '/AICommunity/myStrategy/strategyAPI',
+      name: 'StrategyAPI',
+      component: StrategyAPI
     }
   ],
   scrollBehavior (to, from, savedPosition) {

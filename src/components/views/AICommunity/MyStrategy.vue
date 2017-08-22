@@ -4,7 +4,7 @@
 
 		<div class="main">
 			<el-row class="community-nav">
-				<el-col :span="6" style="padding-left: 50px;">
+				<el-col :span="24" style="padding-left: 50px; background-color: white;">
 					<img :src="goBackIcon">
 					<span>小市值策略</span>
 				</el-col>
@@ -13,30 +13,43 @@
 				<el-col :span="IDECols" :class="{hidePane: shouldHideIDEPane}">
 					<el-row class="IDE-toolbar">
 						<el-col :span="12">
-							<el-button class="toolbar-icon">已保存</el-button>
+							<el-button class="toolbar-icon" :disabled="isSaveDisabled">已保存</el-button>
 							<el-button class="toolbar-icon">编译运行</el-button>
-							<el-button class="toolbar-icon">函数库</el-button>
+							<el-button class="toolbar-icon toolbar-icon-link"><router-link to="/AICommunity/myStrategy/funcLib" style="text-decoration: none;">函数库</router-link></el-button>
 						</el-col>
-						<el-col :span="6" :offset="5">
+						<el-col :span="8" :offset="2">
 							<div style="float: right;">
-								<el-button class="toolbar-icon">API</el-button>
+								<el-button class="toolbar-icon toolbar-icon-link"><router-link to="/AICommunity/myStrategy/strategyAPI" style="text-decoration: none;">API</router-link></el-button>
 								<el-button icon="search" class="toolbar-icon"></el-button>
 								<el-button icon="setting" class="toolbar-icon"></el-button>
-								<el-button class="toolbar-icon"><i class="keyboard"></i></el-button>
+								<el-button class="toolbar-icon" @click="dialogVisible = true"><i class="keyboard"></i></el-button>
+								<el-dialog title="快捷键" size="tiny" :visible.sync="dialogVisible">
+									<span>
+										<el-row v-for="shortcutKey in shortcutKeys" style="margin: 5px;">
+											<el-col :span="6">
+												<span v-text="shortcutKey.keyName" style="float: right; background-color: #f9f2f4;"></span>
+											</el-col>
+											<el-col :span="18" v-text="'：' + shortcutKey.keyDesc"></el-col>
+										</el-row>
+									</span>
+									<span slot="footer">
+										<el-button @click="dialogVisible = false">关闭</el-button>
+									</span>
+								</el-dialog>
 							</div>
 						</el-col>
-						<el-col :span="1">
+						<el-col :span="1" :offset="1">
 							<img :src="toggleIDEIcon" style="float: right; margin: 5px 0px;" @click="toggleIDE">
 						</el-col>
 					</el-row>
 					<el-row>
-						<div style="border: 1px solid black; width: 100%; height: 600px; margin: 0 auto;">
-
+						<div>
+							<ace-editor :content="strategyCode" :height="IDEHeight" :theme="'twilight'" :lang="'python'" :options="editorOptions"></ace-editor>
 						</div>
 					</el-row>
 				</el-col>
-				<el-col :span="12" :class="{hidePane: shouldHideBuildPane}" style="height: 100%;">
-					<el-row class="build-toolbar" :class="{hidePane: shouldHideBuildToolbarPane}">
+				<el-col :span="12" :class="{hidePane: shouldHideBuildPane}">
+					<el-row class="build-toolbar">
 						<el-col :span="20">
 							<div>
 								<el-date-picker class="quant-date" v-model="startDate" type="date" placeholder="选择日期"></el-date-picker>
@@ -44,28 +57,32 @@
 								<el-date-picker class="quant-date" v-model="endDate" type="date" placeholder="选择日期"></el-date-picker>
 
 								<span>￥</span>
-								<el-input v-model="amountMoney" style="width: 122px;"></el-input>
+								<el-input v-model="amountMoney" style="width: 80px;"></el-input>
 								<el-select v-model="frequency" placeholder="请选择" style="width: 84px;">
 									<el-option v-for="fre in freOptions" :key="fre.value" :label="fre.label" :value="fre.value"></el-option>
 								</el-select>
 							</div>
 						</el-col>
-						<el-col :span="2" :offset="1">
+						<el-col :span="4" style="float: right;">
 							<el-button type="primary">运行回测</el-button>
 						</el-col>
 					</el-row>
 					<el-row :class="{hidePane: shouldHideBuildChartPane}">
-						<div style="border: 1px solid black; width: 100%; height: 300px; margin: 0 auto;"></div>
+						<div style="height: 300px; background: white;">
+							chart area
+						</div>
 					</el-row>
 					<el-row>
-						<el-row>
-							<span class="log-tab" @click="showLogMsg">日志</span>
-							<span class="log-tab" @click="showErrorMsg">错误</span>
-							<span style="float: right; padding: 10px"><img :src="toggleMsgPaneIcon" @click="toggleMsgPane"></span>
-						</el-row>
-						<el-row>
-							<div class="log-pane" v-text="outputMsg"></div>
-						</el-row>
+						<div :style="{height: logHeight}">
+							<el-row>
+								<span class="log-tab" @click="showLogMsg">日志</span>
+								<span class="log-tab" @click="showErrorMsg">错误</span>
+								<span style="float: right; padding: 10px"><img :src="toggleMsgPaneIcon" @click="toggleMsgPane"></span>
+							</el-row>
+							<el-row style="height: 100%; width: 100%;">
+								<div class="log-pane" v-text="outputMsg"></div>
+							</el-row>
+						</div>
 					</el-row>
 				</el-col>
 			</el-row>
@@ -77,23 +94,39 @@
 
 <script>
 // import Ace from "ace-builds/src/ace"
+import AceEditor from 'vue2-ace'
+import 'brace/mode/python'
+import 'brace/theme/twilight'
 import NavBar from "@/components/layout/NavBar"
 import FooterBar from "@/components/layout/FooterBar"
+
+var editorHeight = window.innerHeight - 62- 56 - 56;
 
 export default {
 	components: {
 		NavBar,
-		FooterBar
+		FooterBar,
+		AceEditor
+	},
+	mounted() {
+		const that = this;
+		window.onresize = function() {
+			that.IDEHeight = that.getIDEHeight(window.innerHeight) + 'px';
+			that.logHeight = that.getLogHeight(window.innerHeight) + 'px';
+		}
+		document.body.style.overflow = "hidden";
 	},
 	data() {
 		return {
 			goBackIcon: './static/go-back.png',
 			toggleIDEIcon: './static/right-expand.png',
 			toggleMsgPaneIcon: './static/up-expand.png',
+			editorOptions: {fontSize: '16px'},
 			IDECols: 12,
+			IDEHeight: editorHeight + 'px',
+			logHeight: (editorHeight - 300) > 0 ? (editorHeight - 300 + 'px') : '0px',
 			shouldHideIDEPane: false,
 			shouldHideBuildPane: false,
-			shouldHideBuildToolbarPane: false,
 			shouldHideBuildChartPane: false,
 			startDate: "2016-8-19",
 			endDate: "2017-8-19",
@@ -108,6 +141,7 @@ export default {
 			errorMsg: "error message",
 			outputMsg: '',
 			msgPaneState: 'not-expanded',
+			isSaveDisabled: true,
 			AIComunityMenu: [
 				{title: "首页", link: "/", selected: false},
 				{title: "智能投顾", link: "/AIadvisor/assetsSteward", selected: false},
@@ -120,7 +154,37 @@ export default {
 				},
 				{title: "清华量协", link: "", selected: false},
 				{title: "个人账号", link: "", selected: false}
-			]
+			],
+			dialogVisible: false,
+			shortcutKeys: [
+				{keyName: "F2", keyDesc: "折叠当前"},
+				{keyName: "Alt-0", keyDesc: "折叠其他"},
+				{keyName: "Alt-Shift-0", keyDesc: "展开所有"},
+				{keyName: "Ctrl-/", keyDesc: "注释"},
+				{keyName: "Ctrl-[", keyDesc: "块反缩进"},
+				{keyName: "Ctrl-]", keyDesc: "块缩进"},
+				{keyName: "Ctrl-A", keyDesc: "选择全部"},
+				{keyName: "Ctrl-L", keyDesc: "跳转到"},
+				{keyName: "Ctrl-F", keyDesc: "查找"},
+				{keyName: "Ctrl-Alt-K", keyDesc: "查找全部"},
+				{keyName: "Alt-Shift-K", keyDesc: "选择并查找上一个"},
+				{keyName: "Ctrl-D", keyDesc: "删除当前行"},
+				{keyName: "Ctrl-Shift-D", keyDesc: "复制并粘贴当前行"},
+				{keyName: "Ctrl-H", keyDesc: "替换"},
+				{keyName: "Alt-Up", keyDesc: "上移行"},
+				{keyName: "Alt-Down", keyDesc: "下移行"},
+				{keyName: "Ctrl-Shift-Left", keyDesc: "选择左侧单词"},
+				{keyName: "Ctrl-Shift-Right", keyDesc: "选择右侧单词"},
+				{keyName: "Alt-Shift-Left", keyDesc: "选择到行起始"},
+				{keyName: "Alt-Shift-Right", keyDesc: "选择到行结束"},
+				{keyName: "Ctrl-Home", keyDesc: "跳转到开始"},
+				{keyName: "Ctrl-End", keyDesc: "跳转到结尾"},
+				{keyName: "Ctrl-Left", keyDesc: "跳到单词左侧"},
+				{keyName: "Ctrl-Right", keyDesc: "跳到单词右侧"},
+				{keyName: "Alt-Left|Home", keyDesc: "跳转到行起始"},
+				{keyName: "Alt-Right|End", keyDesc: "跳转到行结束"}
+			],
+			strategyCode: ''
 		}
 	},
 	methods: {
@@ -147,15 +211,23 @@ export default {
 		toggleMsgPane: function() {
 			if(this.msgPaneState === "not-expanded") {
 				this.shouldHideBuildChartPane = true;
-				this.shouldHideBuildToolbarPane = true;
 				this.msgPaneState = "expanded";
 				this.toggleMsgPaneIcon = "./static/down-expand.png";
+				this.logHeight = this.getIDEHeight(window.innerHeight) + 'px';
+				console.log(this.logHeight + "***");
 			}else {
 				this.shouldHideBuildChartPane = false;
-				this.shouldHideBuildToolbarPane = false;
 				this.msgPaneState = "not-expanded";
 				this.toggleMsgPaneIcon = "./static/up-expand.png";
+				this.logHeight = this.getLogHeight(window.innerHeight) + 'px';
 			}
+		},
+		getIDEHeight: function(_windowHeight) {
+			return _windowHeight - 62- 56 - 56;
+		},
+		getLogHeight: function(_windowHeight) {
+			var _editorHeight = _windowHeight - 62- 56 - 56;
+			return (_editorHeight - 300) > 0 ? (_editorHeight - 300) : 0
 		}
 	}
 }
@@ -163,6 +235,8 @@ export default {
 
 <style lang="scss">
 	#AI-community {
+		overflow-y: hidden;
+		
 		.main {
 			font-size: 14px;
 
@@ -179,6 +253,10 @@ export default {
 
 					.toolbar-icon {
 						padding: 5px;
+					}
+
+					.toolbar-icon-link a:link, a:hover, a:visited, a:active {
+						color: black;
 					}
 
 					.keyboard:before {
@@ -200,7 +278,6 @@ export default {
 				}
 
 				.log-pane {
-					width: 100%;
 					height: 100%;
 					min-height: 300px;
 					margin: 0 auto;

@@ -33,6 +33,9 @@ export default {
 		NavBar,
 		FooterBar
 	},
+	mounted() {
+		document.body.style.overflow = "auto";
+	},
 	data() {
 		return {
 			AIadvisorMenu: [
