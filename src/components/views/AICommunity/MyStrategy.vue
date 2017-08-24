@@ -110,7 +110,7 @@
 									<div><img :src="toolTipIcon"></div>
 									<div style="color: grey; font-size: 16px; padding: 5px;">点击"编译运行"进行快速回测或者点击"运行回测"进行详细回测</div>
 								</div>
-								<div :class="{hidePanel: shouldHideChart}">
+								<div :class="{hidePane: shouldHideChart}">
 									chart area
 								</div>
 							</div>
