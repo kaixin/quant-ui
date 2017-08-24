@@ -39,7 +39,7 @@ export default {
 		font-size: 16px;
 		padding-left: 100px;
 		padding-right: 50px;
-		background-color: #192939;
+		background-color: #122333;
 
 		.quant-menu {
 			height: 62px;
