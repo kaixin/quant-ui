@@ -14,7 +14,7 @@
 					<el-row class="IDE-toolbar">
 						<el-col :span="12">
 							<el-button class="toolbar-icon" :disabled="isSaveDisabled">已保存</el-button>
-							<el-button class="toolbar-icon">编译运行</el-button>
+							<el-button class="toolbar-icon" @click="startBuild">编译运行</el-button>
 							<el-button class="toolbar-icon toolbar-icon-link"><router-link to="/AICommunity/myStrategy/funcLib" style="text-decoration: none;">函数库</router-link></el-button>
 						</el-col>
 						<el-col :span="8" :offset="2">
@@ -50,26 +50,70 @@
 				</el-col>
 				<el-col :span="12" :class="{hidePane: shouldHideBuildPane}">
 					<el-row class="build-toolbar">
-						<el-col :span="20">
-							<div>
-								<el-date-picker class="quant-date" v-model="startDate" type="date" placeholder="选择日期"></el-date-picker>
-								<span>至</span>
-								<el-date-picker class="quant-date" v-model="endDate" type="date" placeholder="选择日期"></el-date-picker>
+						<div :class="{hidePane: shouldHideBuildToolbar}">
+							<el-col :span="20">
+								<div>
+									<el-date-picker class="quant-date" v-model="startDate" type="date" placeholder="选择日期"></el-date-picker>
+									<span>至</span>
+									<el-date-picker class="quant-date" v-model="endDate" type="date" placeholder="选择日期"></el-date-picker>
 
-								<span>￥</span>
-								<el-input v-model="amountMoney" style="width: 80px;"></el-input>
-								<el-select v-model="frequency" placeholder="请选择" style="width: 84px;">
-									<el-option v-for="fre in freOptions" :key="fre.value" :label="fre.label" :value="fre.value"></el-option>
-								</el-select>
-							</div>
-						</el-col>
-						<el-col :span="4" style="float: right;">
-							<el-button type="primary">运行回测</el-button>
-						</el-col>
+									<span>￥</span>
+									<el-input v-model="amountMoney" style="width: 80px;"></el-input>
+									<el-select v-model="frequency" placeholder="请选择" style="width: 84px;">
+										<el-option v-for="fre in freOptions" :key="fre.value" :label="fre.label" :value="fre.value"></el-option>
+									</el-select>
+								</div>
+							</el-col>
+							<el-col :span="4" style="float: right;">
+								<el-button type="primary" @click="runBackTest">运行回测</el-button>
+							</el-col>
+						</div>
+						<div :class="{hidePane: shouldHideBuildProgress}">
+							<el-col :span="8" style="padding-top: 15px;">
+								<el-progress :percentage="progressVal" :show-text="false"></el-progress>
+							</el-col>
+							<el-col :span="4" style="margin-left: 20px">
+								<el-button @click="cancelBuild">取消编译</el-button>
+							</el-col>
+						</div>
 					</el-row>
 					<el-row :class="{hidePane: shouldHideBuildChartPane}">
-						<div style="height: 300px; background: white;">
-							chart area
+						<div style="height: 320px; background: white; padding: 10px;">
+							<div style="height: 35px;">
+								<div class="char-status" style="color: #255da8;">
+									<div>策略收益</div>
+									<div>--</div>
+								</div>
+								<div class="char-status" style="color: #aa4643;">
+									<div>基准收益</div>
+									<div>--</div>
+								</div>
+								<div class="char-status">
+									<div>Alpha</div>
+									<div>--</div>
+								</div>
+								<div class="char-status">
+									<div>Beta</div>
+									<div>--</div>
+								</div>
+								<div class="char-status">
+									<div>Sharpe</div>
+									<div>--</div>
+								</div>
+								<div class="char-status">
+									<div>最大回撤</div>
+									<div>--</div>
+								</div>
+							</div>
+							<div style="height: 265px;">
+								<div :class="{hidePane: shouldHideToolTip}" style="height: 100%; padding-top: 50px; text-align: center">
+									<div><img :src="toolTipIcon"></div>
+									<div style="color: grey; font-size: 16px; padding: 5px;">点击"编译运行"进行快速回测或者点击"运行回测"进行详细回测</div>
+								</div>
+								<div :class="{hidePanel: shouldHideChart}">
+									chart area
+								</div>
+							</div>
 						</div>
 					</el-row>
 					<el-row>
@@ -121,6 +165,7 @@ export default {
 			goBackIcon: './static/go-back.png',
 			toggleIDEIcon: './static/right-expand.png',
 			toggleMsgPaneIcon: './static/up-expand.png',
+			toolTipIcon: './static/tooltip.png',
 			editorOptions: {fontSize: '16px'},
 			IDECols: 12,
 			IDEHeight: editorHeight + 'px',
@@ -128,6 +173,11 @@ export default {
 			shouldHideIDEPane: false,
 			shouldHideBuildPane: false,
 			shouldHideBuildChartPane: false,
+			shouldHideBuildToolbar: false,
+			shouldHideBuildProgress: true,
+			shouldHideToolTip: false,
+			shouldHideChart: true,
+			progressVal: 0,
 			startDate: "2016-8-19",
 			endDate: "2017-8-19",
 			amountMoney: 100000,
@@ -228,6 +278,30 @@ export default {
 		getLogHeight: function(_windowHeight) {
 			var _editorHeight = _windowHeight - 62- 56 - 56;
 			return (_editorHeight - 300) > 0 ? (_editorHeight - 300) : 0
+		},
+		startBuild: function() {
+			//TO DO: get code and send to back end
+
+			this.shouldHideBuildToolbar = true;
+			this.shouldHideBuildProgress = false;
+			//TO DO: get progress from back end and update progress bar
+			var self = this;
+			var intervalID = setInterval(function() {
+				self.progressVal = self.progressVal + 10;
+				if(self.progressVal === 100) {
+					//TO DO: hide tooltip and show chart
+					self.cancelBuild();
+					clearInterval(intervalID);
+				}
+			}, 100);
+		},
+		cancelBuild: function() {
+			this.shouldHideBuildToolbar = false;
+			this.shouldHideBuildProgress = true;
+			this.progressVal = 0;
+		},
+		runBackTest: function() {
+			console.log("TO DO:运行回测");
 		}
 	}
 }
@@ -266,6 +340,12 @@ export default {
 
 				.build-toolbar {
 					padding: 10px;
+				}
+
+				.char-status {
+					display: inline-block;
+					width: calc(100%/6.5);
+					text-align: center;
 				}
 
 				.log-tab {
