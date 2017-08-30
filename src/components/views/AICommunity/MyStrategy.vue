@@ -4,7 +4,7 @@
 
 		<div class="main">
 			<el-row class="community-nav">
-				<el-col :span="24" style="padding-left: 50px; background-color: white;">
+				<el-col :span="24" style="padding-left: 50px; background-color: white; border: 1px solid #e6e6e6;">
 					<img :src="goBackIcon">
 					<span>小市值策略</span>
 					<div  style="display: inline-block; float: right; padding-right: 50px;">
@@ -94,6 +94,7 @@ export default {
 				}
 
 				.nav-button:hover {
+					cursor: pointer;
 					color: #00BAE9;
 				}
 
