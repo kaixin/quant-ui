@@ -129,12 +129,22 @@ import AceEditor from 'vue2-ace'
 import 'brace/mode/python'
 import 'brace/theme/twilight'
 
-var editorHeight = window.innerHeight - 62- 56 - 56;
+var globalMenuHeight = 62;
+var navSubMenuHeight = 56;
+var IDEtoolbarHeight = 56;
+var IDEHeight = 320;
+var logToolbarHeight = 42;
+var editorHeight = window.innerHeight - globalMenuHeight - navSubMenuHeight - IDEtoolbarHeight;
+var strategyBaseURL = "http://166.111.17.78:8000/";
+var submitTaskURL = "regression/task/submit/";
+var getTaskStateURL = "regression/task/state/";
+var strategySessionKey = "strategy_data";
 
 export default {
 	components: {
 		AceEditor
 	},
+	props: ['activeTabChanged'],
 	data() {
 		return {
 			toggleIDEIcon: './static/right-expand.png',
@@ -143,7 +153,7 @@ export default {
 			editorOptions: {fontSize: '16px'},
 			IDECols: 12,
 			IDEHeight: editorHeight + 'px',
-			logHeight: (editorHeight - 300) > 0 ? (editorHeight - 300 + 'px') : '0px',
+			logHeight: (editorHeight - IDEHeight - logToolbarHeight) > 0 ? (editorHeight - IDEHeight - logToolbarHeight+ 'px') : '0px',
 			shouldHideIDEPane: false,
 			shouldHideBuildPane: false,
 			shouldHideBuildChartPane: false,
@@ -152,8 +162,8 @@ export default {
 			shouldHideToolTip: false,
 			shouldHideChart: true,
 			progressVal: 0,
-			startDate: "2016-8-19",
-			endDate: "2017-8-19",
+			startDate: new Date("2016-08-19"),
+			endDate: new Date("2017-08-19"),
 			amountMoney: 100000,
 			frequency: 'day',
 			freOptions: [
@@ -241,15 +251,34 @@ export default {
 			}
 		},
 		getIDEHeight: function(_windowHeight) {
-			return _windowHeight - 62- 56 - 56;
+			return _windowHeight - globalMenuHeight - navSubMenuHeight - IDEtoolbarHeight;
 		},
 		getLogHeight: function(_windowHeight) {
-			var _editorHeight = _windowHeight - 62- 56 - 56;
-			return (_editorHeight - 300) > 0 ? (_editorHeight - 300) : 0
+			var _editorHeight = _windowHeight - globalMenuHeight - navSubMenuHeight - IDEtoolbarHeight;
+			return (_editorHeight - IDEHeight - logToolbarHeight) > 0 ? (_editorHeight - IDEHeight - logToolbarHeight) : 0
 		},
 		startBuild: function() {
 			//TO DO: get code and send to back end
+			var taskData = {
+				code: this.strategyCode,
+				task_type: 0,
+				user_id: "test_user",
+				start_time: this.startDate.getTime()/1000,
+				end_time: this.endDate.getTime()/1000,
+				symbol: 'rb1801'
+			};
+			console.log(taskData);
+			this.$http.post(strategyBaseURL + submitTaskURL, taskData, {dataType: 'JSON'}).then(
+				function(res) {
+					console.log(res);
+				}, function(res) {
 
+				});
+			// this.$http({url: strategyBaseURL + submitTaskURL, method: 'POST', data: taskData, dataType: 'JSON'}).then(function(res) {
+			// 	console.log(res);
+			// }, function(res) {
+
+			// });
 			this.shouldHideBuildToolbar = true;
 			this.shouldHideBuildProgress = false;
 			//TO DO: get progress from back end and update progress bar
@@ -269,7 +298,10 @@ export default {
 			this.progressVal = 0;
 		},
 		runBackTest: function() {
-			console.log("TO DO:运行回测");
+			//Use sessionStorage to pass params to BackTestDetail page
+			this.storeStrategyData();
+			//Send message to tell parent component to show back-test-detail tab
+			this.$emit("message", "SHOW_BACK_TEST_DETAIL_TAB");
 		},
 		editorUpdate: function(editorContent) {
 			var self = this;
@@ -302,6 +334,21 @@ export default {
 				console.log("***save editor content to server " + self.strategyCode);
 			}, 500);
 			
+		},
+		storeStrategyData: function() {
+			var strategySessionData = {
+				strategyCode: this.strategyCode,
+				startDate: this.startDate,
+				endDate: this.endDate,
+				amountMoney: this.amountMoney,
+				frequency: this.frequency
+			}
+			window.sessionStorage[strategySessionKey] = JSON.stringify(strategySessionData);
+		}
+	},
+	watch: {
+		activeTabChanged: function() {
+			this.storeStrategyData();
 		}
 	}
 
@@ -349,7 +396,7 @@ export default {
 
 				.log-pane {
 					height: 100%;
-					min-height: 300px;
+					min-height: 200px;
 					margin: 0 auto;
 					background-color: black;
 					color: white;

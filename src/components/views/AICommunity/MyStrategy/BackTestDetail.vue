@@ -23,30 +23,46 @@
 
 			<span style="float: right;">
 				<el-button type="danger" @click="mockTradeDiagVisible = true"><i class="mockTradeIcon"></i> 模拟交易</el-button>
-
-				<el-dialog
+				<el-button type="primary"><i class="attrAnalyzeIcon"></i> 归因分析</el-button>
+				<el-button><i class="shareIcon"></i> 分享到社区</el-button>
+				<el-button @click="strategyCodeDiagVisible = true">查看代码</el-button>
+				<el-dropdown trigger="click" style="margin-left: 10px;">
+				  	<el-button>
+				    	导出<i class="el-icon-caret-bottom el-icon--right"></i>
+				  	</el-button>
+				  	<el-dropdown-menu slot="dropdown">
+				    	<el-dropdown-item>收益概述</el-dropdown-item>
+				    	<el-dropdown-item>交易详情</el-dropdown-item>
+					    <el-dropdown-item>持仓&收益</el-dropdown-item>
+					    <el-dropdown-item>日志</el-dropdown-item>
+					</el-dropdown-menu>
+				</el-dropdown>
+			</span>
+		</div>
+		<div>
+			<el-dialog
 				  title="新建模拟交易"
 				  :visible.sync="mockTradeDiagVisible"
 				  size="tiny">
-				  <div>
-				  	<div>
-				  		<span>交易名称</span>
+				  <div style="width: 300px;">
+				  	<div class="new-mock-trade-item">
+				  		<div>交易名称</div>
 				  		<el-input v-model="tradeName" placeholder="请输入内容"></el-input>
 				  	</div>
-				  	<div>
-				  		<span>初始资金</span>
+				  	<div class="new-mock-trade-item">
+				  		<div>初始资金</div>
 				  		<el-input v-model="tradeMoney" placeholder="请输入内容"></el-input>
 				  	</div>
-				  	<div>
-				  		<span>开始日期</span>
+				  	<div class="new-mock-trade-item">
+				  		<div>开始日期</div>
 				  		 <el-date-picker
 					      v-model="tradeStartDate"
 					      type="date"
 					      placeholder="选择日期">
 					    </el-date-picker>
 				  	</div>
-				  	<div>
-				  		<span>数据频率</span>
+				  	<div class="new-mock-trade-item">
+				  		<div>数据频率</div>
 				  		<template>
 						  <el-select v-model="tradeFre" placeholder="请选择">
 						    <el-option
@@ -58,8 +74,8 @@
 						  </el-select>
 						</template>
 				  	</div>
-				  	<div>
-				  		<span>时限</span>
+				  	<div class="new-mock-trade-item">
+				  		<div>时限</div>
 				  		<template>
 						  <el-select v-model="tradeTimeLimit" placeholder="请选择">
 						    <el-option
@@ -77,22 +93,15 @@
 				    <el-button type="primary" @click="mockTradeDiagVisible = false">确 定</el-button>
 				  </span>
 				</el-dialog>
-
-				<el-button type="primary"><i class="attrAnalyzeIcon"></i> 归因分析</el-button>
-				<el-button><i class="shareIcon"></i> 分享到社区</el-button>
-				<el-button>查看代码</el-button>
-				<el-dropdown trigger="click" style="margin-left: 10px;">
-				  	<el-button>
-				    	导出<i class="el-icon-caret-bottom el-icon--right"></i>
-				  	</el-button>
-				  	<el-dropdown-menu slot="dropdown">
-				    	<el-dropdown-item>收益概述</el-dropdown-item>
-				    	<el-dropdown-item>交易详情</el-dropdown-item>
-					    <el-dropdown-item>持仓&收益</el-dropdown-item>
-					    <el-dropdown-item>日志</el-dropdown-item>
-					</el-dropdown-menu>
-				</el-dropdown>
-			</span>
+		</div>
+		<div>
+			<el-dialog
+			  title="策略代码"
+			  :visible.sync="strategyCodeDiagVisible"
+			  size="small">
+			  <ace-editor :content="strategyCode" :theme="'tomorrow'" height="500px" :lang="'python'" :options="editorOptions">
+			  </ace-editor>
+			</el-dialog>
 		</div>
 		<div class="strategy-results" style="padding-top: 12px; min-height: calc(100vh - 182px);">
 			<div class="result-nav">
@@ -147,6 +156,12 @@ import Volatility from "@/components/views/AICommunity/MyStrategy/BackTestDetail
 import Benchmark from "@/components/views/AICommunity/MyStrategy/BackTestDetail/Benchmark"
 import MaxDrawdown from "@/components/views/AICommunity/MyStrategy/BackTestDetail/MaxDrawdown"
 
+import AceEditor from 'vue2-ace'
+import 'brace/mode/python'
+import 'brace/theme/tomorrow'
+
+var strategySessionKey = "strategy_data";
+
 export default {
 	components: {
 		GeneralInfo,
@@ -163,22 +178,27 @@ export default {
 		InfoRatio,
 		Volatility,
 		Benchmark,
-		MaxDrawdown
+		MaxDrawdown,
+		AceEditor
 	},
 	mounted() {
 		document.body.style.overflow = "auto";
 	},
+	props: ['activeTabChanged'],
 	data() {
 		return {
 			statusIcon: "./static/back-test-success.png",
-			startDate: "2017-07-12",
-			endDate: "2017-07-30",
+			startDate: "",
+			endDate: "2",
 			amountMoney: 100000,
 			frequencyLabel: "每天",
+			strategyCode: "",
 			statusDesc: "回测完成",
 			timeCost: "3.75s",
 			selectedTab: "generalInfo",
 			mockTradeDiagVisible: false,
+			strategyCodeDiagVisible: false,
+			editorOptions: {fontSize: '16px'},
 			tradeName: '小市值策略',
 			tradeMoney: 100000,
 			tradeFre: 'day',
@@ -215,6 +235,34 @@ export default {
 	methods: {
 		handleTabSelect: function(index) {
 			this.selectedTab = index;
+		},
+		formatDate: function(date) {
+			var year = date.getFullYear();
+			var month = date.getMonth() +1;
+			var day = date.getDate();
+			if(month < 9) {
+				month = "0" + month;
+			}
+			if(day < 9) {
+				day = "0" + day;
+			}
+			return year + "-" + month + "-" + day;
+		}
+	},
+	watch: {
+		//Get refresh message from parent component to refresh data
+		activeTabChanged: function(val) {
+			if(val === "back-test-detail") {
+				if(window.sessionStorage[strategySessionKey]){
+					var strategyData = JSON.parse(window.sessionStorage[strategySessionKey]);
+					this.startDate = this.formatDate(new Date(strategyData.startDate));
+					this.endDate = this.formatDate(new Date(strategyData.endDate));
+					this.amountMoney = strategyData.amountMoney;
+					this.frequencyLabel = (strategyData.frequency === "day") ? "每天" : "每分钟";
+					this.strategyCode = strategyData.strategyCode;
+					delete window.sessionStorage[strategySessionKey];
+				}
+			}
 		}
 	}
 }
@@ -301,6 +349,10 @@ export default {
 				}
 			}
 
+		}
+
+		.new-mock-trade-item {
+			padding-bottom: 10px;
 		}
 
 	}

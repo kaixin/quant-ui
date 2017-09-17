@@ -19,8 +19,8 @@
 				</el-col>
 			</el-row>
 			<div class="community-content">
-				<edit-strategy :style="{display: activeTab==='edit-strategy' ? 'block' : 'none'}"></edit-strategy>
-				<back-test-detail :style="{display: activeTab==='back-test-detail' ? 'block' : 'none'}"></back-test-detail>
+				<edit-strategy :activeTabChanged="activeTab" v-on:message="receiveMessageFromEditStrategy" :style="{display: activeTab==='edit-strategy' ? 'block' : 'none'}"></edit-strategy>
+				<back-test-detail :activeTabChanged="activeTab" :style="{display: activeTab==='back-test-detail' ? 'block' : 'none'}"></back-test-detail>
 				<compile-list :style="{display: activeTab==='compile-list' ? 'block' : 'none'}"></compile-list>
 				<back-test-list :style="{display: activeTab==='back-test-list' ? 'block' : 'none'}"></back-test-list>
 			</div>
@@ -63,13 +63,20 @@ export default {
 				{title: "清华量协", link: "", selected: false},
 				{title: "个人账号", link: "", selected: false}
 			],
-			activeTab: 'edit-strategy'
+			activeTab: 'edit-strategy',
+			shouldRefresh: false
 		}
 	},
 	methods: {
 		switchNavTab: function(tabName) {
 			if(tabName) {
 				this.activeTab = tabName;
+			}
+		},
+		//Get message handler to response to child component message
+		receiveMessageFromEditStrategy: function(msg) {
+			if(msg === "SHOW_BACK_TEST_DETAIL_TAB") {
+				this.activeTab = "back-test-detail";
 			}
 		}
 	}
