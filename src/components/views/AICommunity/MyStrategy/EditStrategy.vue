@@ -162,8 +162,8 @@ export default {
 			shouldHideToolTip: false,
 			shouldHideChart: true,
 			progressVal: 0,
-			startDate: new Date("2016-08-19"),
-			endDate: new Date("2017-08-19"),
+			startDate: new Date("2017-01-01"),
+			endDate: new Date("2017-12-31"),
 			amountMoney: 100000,
 			frequency: 'day',
 			freOptions: [
@@ -268,13 +268,27 @@ export default {
 				symbol: 'rb1801'
 			};
 			console.log(taskData);
-			this.$http.post(strategyBaseURL + submitTaskURL, taskData, {dataType: 'JSON'}).then(
+			var self = this;
+			this.$http.post(strategyBaseURL + submitTaskURL, taskData).then(
 				function(res) {
-					console.log(res);
-				}, function(res) {
+					var stateIntervalID = setInterval(function() {
+						self.$http.post(strategyBaseURL + getTaskStateURL, res.data.data).then(
+							function(stateRes) {
+								 console.log("***");
+								 console.log(stateRes);
+								 if(stateRes.data.data.report.final_status) {
+								 	clearInterval(stateIntervalID);
+								 	//TO DO: show data and chart in UI according to data returned from server side
+								 }
+							}, function(stateRes) {
 
+							}
+							);
+					}, 100);
+				}, function(res) {
+					console.log("***fail");
 				});
-			// this.$http({url: strategyBaseURL + submitTaskURL, method: 'POST', data: taskData, dataType: 'JSON'}).then(function(res) {
+			// this.$http({url: strategyBaseURL + submitTaskURL, method: 'POST', data: taskData, {}}).then(function(res) {
 			// 	console.log(res);
 			// }, function(res) {
 
@@ -331,7 +345,7 @@ export default {
 			self.saveLabel = "保存中";
 			setTimeout(function() {
 				self.saveLabel = "已保存";
-				console.log("***save editor content to server " + self.strategyCode);
+				// console.log("***save editor content to server " + self.strategyCode);
 			}, 500);
 			
 		},
