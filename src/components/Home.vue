@@ -3,27 +3,21 @@
 		<nav-bar :navMenuItems="homeMenu"></nav-bar>
 
 		<div class="main">
-			<div class="ad-pane">
-				<div style="display: inline-block; text-align: center; float: left; width: 60%; padding-left: 100px;">
-					<div>
-						<span style="font-size: 35px; color: white;">人工智能课堂</span>
-					</div>
-					<div>
-						<img style="width: 500px; height: 300px;" src="/static/ad-image.png">
-					</div>
+			<div class="home-banner">
+				<div style="padding-top: 185px; text-align: center;">
+					<img :src="homeBannerTextIcon">
 				</div>
-				<div style="display: inline-block; width: 265px; height: 310px; margin: 16px; background-color: white; float: left; position: relative;">
-						<span class="ad-pane-circle"></span>
-						<span class="ad-pane-circle"></span>
-						<span class="ad-pane-circle"></span>
-						<span class="ad-pane-circle"></span>
-						<div style="margin-top: 40px;">
-							<p class="ad-pane-desc">金融、数学</p>
-							<p class="ad-pane-desc">计算机</p>
+				<div style="padding-top: 80px; text-align: center;">
+					<div style="display: inline-block;">
+						<div class="home-banner-button" style="background-color: #14AAFF; border: 1px solid #14AAFF;">
+							<router-link to="/signalDevelop">智能信号开发</router-link>
 						</div>
-						<p class="ad-pane-button ad-pane-button1">开启人工智能之旅</p>
-						<p class="ad-pane-button ad-pane-button2">人工智能擂台</p>
+						<div class="home-banner-button" style="margin-left: 46px; border: 1px solid #FFFFFF;">
+							优质信号商城
+						</div>
+					</div>
 				</div>
+				<div style="padding-top: 150px; text-align: center;"></div>
 			</div>
 			<div class="signal-city-pane">
 				<div class="pane-header">
@@ -141,6 +135,7 @@ export default {
 				{title: "清华量协", link: "", selected: false},
 				{title: "个人账号", link: "", selected: false}
 			],
+			homeBannerTextIcon: "/static/home-banner-text.png",
 			ourServices: [
 				{
 					name: "高质量数据",
@@ -215,69 +210,30 @@ export default {
 	.main {
 		background-color: #F2F3F7;
 
-		.ad-pane {
-			padding-top: 30px;
-			height: 460px;
-			background-color: #378DE5;
+		.home-banner {
+			background: url("/static/home-banner.png") no-repeat center center;
 
-			.ad-pane-circle {
-				width: 10px;
-				height: 10px;
+			.home-banner-button {
 				display: inline-block;
-				border: 1px solid #378DE5;
-				border-radius: 10px;
-				position: absolute;
-				left: 0px;
-				top: 0px;
-			}
-
-			.ad-pane-circle:nth-child(1) {
-				margin-left: 16px;
-				margin-top: 16px;
-			}
-
-			.ad-pane-circle:nth-child(2) {
-				left: 100%;
-				margin-left: -26px;
-				margin-top: 16px;
-			}
-
-			.ad-pane-circle:nth-child(3) {
-				top: 100%;
-				margin-left: 16px;
-				margin-top: -26px;
-			}
-			.ad-pane-circle:nth-child(4) {
-				top: 100%;
-				left: 100%;
-				margin-left: -26px;
-				margin-top: -26px;
-			}
-
-			.ad-pane-desc {
-				font-size: 35px;
-				margin: 0px;
+				height: 46px;
+				width: 172px;
+				font-size: 18px;
 				text-align: center;
-				color: #378DE5;
-			}
-
-			.ad-pane-button {
-				font-size: 21px;
-				text-align: center;
-				border: 1px solid #378DE5;
-				margin: 20px;
-				padding: 10px 0px;
-			}
-
-			.ad-pane-button1 {
-				background-color: #378DE5;
+				vertical-align: middle;
+				border-radius: 23px;
 				color: white;
-			}
+				line-height: 46px;
+				cursor: pointer;
 
-			.ad-pane-button2 {
-				color: #378DE5;
-			}
+				a {
+					color: white;
+					text-decoration: none;
 
+					&:hover {
+
+					}
+				}
+			}
 		}
 
 		.signal-city-pane {

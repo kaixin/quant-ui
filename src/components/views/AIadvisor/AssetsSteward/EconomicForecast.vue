@@ -2,7 +2,7 @@
 	<div id="economic-forecaset">
 		<el-row>
 			<el-col :span="7">
-				<span>请选择国家</span>
+				<span>国家</span>
 				<el-select v-model="selectedCountry" plcaholder="请选择">
 					<el-option 
 						v-for="country in countries"
@@ -12,7 +12,7 @@
 				</el-select>
 			</el-col>
 			<el-col :span="12">
-				<span>请选择预测的周期时间</span>
+				<span>预测周期</span>
 				 <el-date-picker
 			      v-model="start"
 			      type="date"
@@ -43,10 +43,26 @@
 		<el-row>
 			<el-table :data="strategyData" style="width: 100%;"  max-height="300">
 			    <el-table-column prop="Date" label="日期"></el-table-column>
-			    <el-table-column prop="1" label="策略一"></el-table-column>
-			    <el-table-column prop="2" label="策略二"></el-table-column>
-			    <el-table-column prop="3" label="策略三"></el-table-column>
-			    <el-table-column prop="4" label="策略四"></el-table-column>
+			    <el-table-column prop="1" label="状态一">
+			    	<template scope="scope">
+			    		{{scope.row["1"] | formatStateData}}
+			    	</template>
+				</el-table-column>
+			    <el-table-column prop="2" label="状态二">
+			    	<template scope="scope">
+			    		{{scope.row["2"] | formatStateData}}
+			    	</template>
+				</el-table-column>
+			    <el-table-column prop="3" label="状态三">
+			    	<template scope="scope">
+			    		{{scope.row["3"] | formatStateData}}
+			    	</template>
+				</el-table-column>
+			    <el-table-column prop="4" label="状态四">
+			    	<template scope="scope">
+			    		{{scope.row["4"] | formatStateData}}
+			    	</template>
+				</el-table-column>
 			    <el-table-column prop="state" label="状态"></el-table-column>
 		    </el-table>
 		</el-row>
@@ -59,7 +75,7 @@
 <script>
 import Highstock from 'highcharts/highstock'
 
-var economyURL = "http://166.111.17.111:5002/economy/";
+var economyURL = "http://166.111.17.83:5002/economy/";
 
 export default {
 	data() {
@@ -77,7 +93,8 @@ export default {
 				{value: 3, label: "3"}
 			],
 			freqValue: 1,
-			strategyData: []
+			strategyData: [],
+			stateData: []
 		}
 	},
 	mounted: function() {
@@ -90,8 +107,14 @@ export default {
 			this.$http.get(economyURL + "china").then(function(resp) {
 				resp.data.shift();
 				this.strategyData = resp.data;
+				this.filterStateData(resp.data);
 				this.loadEconomyChart();
 			});
+		},
+		filterStateData: function(data) {
+			for(var i=0; i<data.length; i++) {
+				this.stateData.push([new Date(data[i].Date).getTime(), parseInt(data[i].state)]);
+			}
 		},
 		loadEconomyChart: function() {
 			Highstock.StockChart({
@@ -101,12 +124,17 @@ export default {
 				title: {
 					text: '策略状态图'
 				},
-				data: this.strategyData,
+				
 				series: [{
 					name: '状态',
-					data: [[1,2], [3,4]]
+					data: this.stateData
 				}]
 			});
+		}
+	},
+	filters: {
+		formatStateData: function(val) {
+			return parseFloat(val*100).toFixed(2) + "%"
 		}
 	}
 }
@@ -114,6 +142,7 @@ export default {
 
 <style lang="scss">
 	#economic-forecaset {
+		font-size: 14px;
 		.el-row {
 			margin-bottom: 20px;
 		}

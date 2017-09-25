@@ -73,27 +73,31 @@
 						<div style="height: 35px;">
 							<div class="char-status" style="color: #255da8;">
 								<div>策略收益</div>
-								<div>--</div>
+								<div>{{strategyBenefit | formatBenefit}}</div>
 							</div>
 							<div class="char-status" style="color: #aa4643;">
 								<div>基准收益</div>
-								<div>--</div>
+								<div>{{benchmarkBenefit | formatBenefit}}</div>
 							</div>
 							<div class="char-status">
 								<div>Alpha</div>
-								<div>--</div>
+								<div>{{alpha | formatBenefit}}</div>
 							</div>
 							<div class="char-status">
 								<div>Beta</div>
-								<div>--</div>
+								<div>{{beta | formatBenefit}}</div>
 							</div>
 							<div class="char-status">
 								<div>Sharpe</div>
-								<div>--</div>
+								<div>{{sharp | formatBenefit}}</div>
 							</div>
 							<div class="char-status">
 								<div>最大回撤</div>
-								<div>--</div>
+								<div>{{maxDrawBack | formatBenefit}}</div>
+							</div>
+							<div class="char-status">
+								<div>半衰期</div>
+								<div>{{halfDecay}}</div>
 							</div>
 						</div>
 						<div style="height: 265px;">
@@ -102,7 +106,7 @@
 								<div style="color: grey; font-size: 16px; padding: 5px;">点击"编译运行"进行快速回测或者点击"运行回测"进行详细回测</div>
 							</div>
 							<div :class="{'hide-pane': shouldHideChart}">
-									chart area
+								<div id="benefitChart"></div>
 							</div>
 						</div>
 					</div>
@@ -128,6 +132,7 @@
 import AceEditor from 'vue2-ace'
 import 'brace/mode/python'
 import 'brace/theme/twilight'
+import Highstock from 'highcharts/highstock'
 
 var globalMenuHeight = 62;
 var navSubMenuHeight = 56;
@@ -142,7 +147,8 @@ var strategySessionKey = "strategy_data";
 
 export default {
 	components: {
-		AceEditor
+		AceEditor,
+		Highstock
 	},
 	props: ['activeTabChanged'],
 	data() {
@@ -206,7 +212,15 @@ export default {
 				{keyName: "Alt-Left|Home", keyDesc: "跳转到行起始"},
 				{keyName: "Alt-Right|End", keyDesc: "跳转到行结束"}
 			],
-			strategyCode: ''
+			strategyCode: '',
+			strategyBenefit: "--",
+			benchmarkBenefit: "--",
+			alpha: "--",
+			beta: "--",
+			sharp: "--",
+			maxDrawBack: "--",
+			halfDecay: "--",
+			benefitData: []
 		}
 	},
 	mounted() {
@@ -274,17 +288,26 @@ export default {
 					var stateIntervalID = setInterval(function() {
 						self.$http.post(strategyBaseURL + getTaskStateURL, res.data.data).then(
 							function(stateRes) {
-								 console.log("***");
-								 console.log(stateRes);
-								 if(stateRes.data.data.report.final_status) {
+								 if(stateRes.data && stateRes.data.data && stateRes.data.data.report && stateRes.data.data.report.final_status) {
 								 	clearInterval(stateIntervalID);
 								 	//TO DO: show data and chart in UI according to data returned from server side
+								 	var output = stateRes.data.data.report.output;
+								 	output.total_benefits && (self.strategyBenefit = parseFloat(output.total_benefits) * 100);
+								 	output.alpha && (self.alpha = output.alpha);
+								 	output.beta && (self.beta = output.beta);
+								 	output.max_retracement && (self.maxDrawBack = parseFloat(output.max_retracement) * 100);
+								 	output.half_decay && (self.halfDecay = parseFloat(output.half_decay));
+								 	if(output.net_values) {
+								 		this.formatNetValues(output.net_values);
+								 	}
+								 	self.loadBenefitData();
+
 								 }
 							}, function(stateRes) {
 
 							}
 							);
-					}, 100);
+					}, 1000);
 				}, function(res) {
 					console.log("***fail");
 				});
@@ -358,11 +381,40 @@ export default {
 				frequency: this.frequency
 			}
 			window.sessionStorage[strategySessionKey] = JSON.stringify(strategySessionData);
+		},
+		formatNetValues: function(netValues) {
+			self.benefitData = [];
+			for(var i=0; i<netValues.length; i++) {
+				var _ts = netValues[i].ts * 1000;
+				var _v = netValues[i].v;
+				self.benefitData.push([_ts, _v]);
+			} 
+		},
+		loadBenefitData: function() {
+			Highstock.StockChart({
+				chart: {
+					renderTo: 'benefitChart'
+				},
+				series: [{
+					name: '净值',
+					data: self.benefitData //[[1,2], [3,4]]
+				}]
+			});
+			this.shouldHideToolTip = true;
+			this.shouldHideChart = false;
 		}
 	},
 	watch: {
 		activeTabChanged: function() {
 			this.storeStrategyData();
+		}
+	},
+	filters: {
+		formatBenefit: function(val) {
+			if(val === "--" || !val) {
+				return "--";
+			}
+			return parseFloat(val).toFixed(2) + "%";
 		}
 	}
 
@@ -395,7 +447,7 @@ export default {
 
 				.char-status {
 					display: inline-block;
-					width: calc(100%/6.5);
+					width: calc(100%/7.5);
 					text-align: center;
 				}
 

@@ -7,6 +7,7 @@ import VueResource from 'vue-resource'
 import Home from '@/components/Home'
 import AboutUs from '@/components/AboutUs'
 import AIadvisor from '@/components/AIadvisor'
+import SignalDevelop from '@/components/SignalDevelop'
 
 import AssetsSteward from '@/components/views/AIadvisor/AssetsSteward'
 import ProductManager from '@/components/views/AIadvisor/ProductManager'
@@ -32,6 +33,11 @@ export default new Router({
     	path: '/aboutUs',
     	name: 'AboutUs',
     	component: AboutUs
+    },
+    {
+      path: '/signalDevelop',
+      name: 'SignalDevelop',
+      component: SignalDevelop
     },
     {
       path: '/AIadvisor',

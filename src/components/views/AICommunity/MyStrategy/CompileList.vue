@@ -13,7 +13,7 @@
 				<template>
 				    <el-table
 				      :data="compileListData"
-				      style="width: 100%" @select="selectCompileItem">
+				      style="width: 100%" @selection-change="selectCompileItem">
 				      <el-table-column
 				        prop="id"
 				        label="id"
@@ -145,7 +145,6 @@ export default {
 	},
 	methods: {
 		selectCompileItem: function(selection, row) {
-			console.log(selection);
 			if(selection.length > 0) {
 				this.showEditButtons = true;
 				this.selectedItems = selection
