@@ -18,6 +18,8 @@ import MyStrategy from '@/components/views/AICommunity/MyStrategy'
 import FuncLib from '@/components/views/AICommunity/MyStrategy/FuncLib'
 import StrategyAPI from '@/components/views/AICommunity/MyStrategy/StrategyAPI'
 
+import Shelfsignaler from '@/components/views/Shelfsignal/Shelfsignaler'
+
 Vue.use(Router)
 Vue.use(ElementUI)
 Vue.use(VueResource)
@@ -82,6 +84,11 @@ export default new Router({
       path: '/AICommunity/myStrategy/strategyAPI',
       name: 'StrategyAPI',
       component: StrategyAPI
+    },
+    {
+    	path: '/Shelfsignal/Shelfsignaler',
+    	name: 'Shelfsignaler',
+    	component: Shelfsignaler
     }
   ],
   scrollBehavior (to, from, savedPosition) {
