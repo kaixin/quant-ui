@@ -7,6 +7,7 @@ import VueResource from 'vue-resource'
 import Home from '@/components/Home'
 import AboutUs from '@/components/AboutUs'
 import AIadvisor from '@/components/AIadvisor'
+import Shelfsignal from '@/components/Shelfsignal'
 import SignalDevelop from '@/components/SignalDevelop'
 
 import AssetsSteward from '@/components/views/AIadvisor/AssetsSteward'
@@ -19,6 +20,11 @@ import FuncLib from '@/components/views/AICommunity/MyStrategy/FuncLib'
 import StrategyAPI from '@/components/views/AICommunity/MyStrategy/StrategyAPI'
 
 import Shelfsignaler from '@/components/views/Shelfsignal/Shelfsignaler'
+import Shelfsuccess from '@/components/views/Shelfsignal/Shelfsuccess'
+import Customsignaler from '@/components/views/Customsignal/Customsignaler'
+import Developersignaler from '@/components/views/Developersignal/Developersignaler'
+import Buyersignaler from '@/components/views/Buyersignal/Buyersignaler'
+
 
 Vue.use(Router)
 Vue.use(ElementUI)
@@ -86,10 +92,38 @@ export default new Router({
       component: StrategyAPI
     },
     {
-    	path: '/Shelfsignal/Shelfsignaler',
-    	name: 'Shelfsignaler',
-    	component: Shelfsignaler
-    }
+    	path: '/Shelfsignal',
+    	name: 'Shelfsignal',
+    	component: Shelfsignal,
+    	children:[
+    		{
+    			path: 'Shelfsignaler',
+		    	name: 'Shelfsignaler',
+		    	component: Shelfsignaler
+    		},
+    		{
+    			path: 'Shelfsuccess',
+		    	name: 'Shelfsuccess',
+		    	component: Shelfsuccess
+    		},
+    		{
+    			path: 'Customsignaler',
+    			name: 'Customsignaler',
+    			component: Customsignaler,
+    		},
+    		{
+    			path: 'Developersignaler',
+    			name: 'Developersignaler',
+    			component: Developersignaler,
+    		},
+    		{
+    			path: 'Buyersignaler',
+    			name: 'Buyersignaler',
+    			component: Buyersignaler,
+    		},
+    	]
+    },
+
   ],
   scrollBehavior (to, from, savedPosition) {
     return {x:0, y:0};

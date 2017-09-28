@@ -2,7 +2,8 @@
 
 	<div id="shelf-store">
 		<div class="shelf-header">
-			<img src="../../../../static/go-back.png">
+			<i class="space-white"></i>
+			<img src="../../../../static/go-back.png" style="cursor: pointer;">
 			<span>上架到策略商城</span>
 		</div>
 		<div class="shelf-text">
@@ -55,7 +56,7 @@
 			</div>
 			<div class="inputDiv">
 				<img src="../../../../static/Shelfsignaler/icon_xingxinbitian.png"/>
-				<span>适合的价格</span>
+				<span>信号的价格</span>
 				<input type="text" placeholder="例如：1000"/>
 				<span class="money">元</span>
 			</div>
@@ -64,7 +65,7 @@
 				<span>勾选择视为同意根据平台信号优劣，对价格进行调整</span>
 			</div>
 			<div class="shelf-btn">
-				<button class="btn">提交</button>
+				<el-button type="primary"style="width: 200px;height: 38px;border-radius: 19px;margin-left: 180px;margin-bottom: 40px;background: #00AEFC;font-size: 16px;">提交</el-button>
 			</div>
 		</form>
 		</div>
@@ -73,8 +74,7 @@
 </template>
 
 <script>
-import NavBar from "@/components/layout/NavBar"
-import FooterBar from "@/components/layout/FooterBar"
+	
 
 export default {
 
@@ -100,7 +100,10 @@ export default {
 		height: 62px;
 		background: #e6e6e6;
 		margin-bottom: 42px;
-		padding-left:15%;
+		.space-white{
+			display: inline-block;
+			width: 18%;
+		}
 		img{
 			display: inline-block;
 			margin-top: 24px;
@@ -200,19 +203,6 @@ export default {
 			.shelf-btn{
 				width: 100%;
 				margin-top: 48px;
-				.btn{
-					width: 200px;
-					height: 38px;
-					background: #00AEFC;
-					opacity: 0.5;
-					font-size: 16px;
-					color: #ffffff;
-					text-align: center;
-					border: none;
-					border-radius: 19px;
-					margin-left: 180px;
-					margin-bottom: 40px;
-				}
 			}
 		}
 	}
