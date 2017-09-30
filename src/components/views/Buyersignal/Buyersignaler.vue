@@ -108,7 +108,14 @@
 				<div class="discussion-message-msg">{{distext.dis_text}}</div>
 				<div class="discussion-message-reply"><img src="../../../../static/Buyersignal/icon_huifu.png" alt="" /><span class="discussion-message-reply-msg">回复</span></div>
 			</div>
+			<div class="discussion_input">
+			
+			</div>
+			<div class="discussion_btn">
+				<el-button type="primary">确认发送</el-button>
+			</div>
 		</div>
+		<div class="buyer-middle"></div>
 	</div>
 </template>
 
@@ -461,6 +468,25 @@
 					margin-left: 12px;
 					
 				}
+			}
+		}
+		.discussion_input{
+			width: 100%;
+			height: 300px;
+			border: 1px solid #e6e6e6;
+			margin-top: 30px;
+			box-shadow: #e6e6e6 2px 3px 2px 3px;
+		}
+		.discussion_btn{
+			width: 110px;
+			height: 40px;
+			font-size: 16px;
+			color: #fff;
+			margin-top: 24px;
+			margin-bottom: 70px;
+			.el-button{
+				width: 100%;
+				height: 40px;
 			}
 		}
 	}
