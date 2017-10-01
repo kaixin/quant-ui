@@ -25,7 +25,7 @@
 	.customer_banner{
 		width: 100%;
 		height: 320px;
-		background: url(../../../../static/Customsignaler/icon_banner.png) no-repeat;
+		background: url(/static/Customsignaler/icon_banner.png) no-repeat;
 		background-size: cover;
 		padding-top: 180px;
 		.customer_text{
