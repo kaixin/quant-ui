@@ -6,15 +6,83 @@
 				<p>一起搞事情吧</p>
 			</div>
 		</div>
-			<div class="customer_box">
-				<div class="customer_box_top">
-					
-				</div>
+		<div class="customer_box">
+			<div class="customer_box_top">
+				<div class="customer_slider customer_box_left">客户定制活动</div>
+				<div class="customer_slider customer_box_right">官方征集活动</div>
 			</div>
 		</div>
+		<div class="customer_content customer_cus" >
+			<div class="customer_content_list" v-for="obj in customerMessage">
+				<div class="customer_list_img"><img :src="obj.img" /></div>
+				<div class="customer_list_text">
+					<div class="customer_list_text_title">{{obj.title}}</div>
+					<div class="customer_list_text_anther">发布者:<span >{{obj.author}}</span></div>
+					<div class="customer_list_text_anther">参与人数:<span >{{obj.num}}</span></div>
+					<div class="customer_list_text_anther">截止日间:<span >{{obj.time}}</span></div>
+				</div>
+				<div class="customer_list_money">报价: <span>{{obj.money}}</span></div>
+			</div>
+		</div>
+		<div class="customer_content customer_offical" >
+			<div class="customer_content_list" v-for="obj in officalMessage">
+				<div class="customer_list_img"><img :src="obj.img" /></div>
+				<div class="customer_list_text">
+					<div class="customer_list_text_title">{{obj.title}}</div>
+					<div class="customer_list_text_anther">发布者:<span >{{obj.author}}</span></div>
+					<div class="customer_list_text_anther">参与人数:<span >{{obj.num}}</span></div>
+					<div class="customer_list_text_anther">截止日间:<span >{{obj.time}}</span></div>
+				</div>
+				<div class="customer_list_money">报价: <span>{{obj.money}}</span></div>
+			</div>
+		</div>
+		<div class="customer_pag">
+			<div class="pag">
+				<el-pagination
+			      @size-change="handleSizeChange"
+			      @current-change="handleCurrentChange"
+			      :current-page.sync="currentPage3"
+			      :page-size="100"
+			      layout="prev, pager, next, jumper"
+			      :total="1000">
+			    </el-pagination>
+			</div>
+		</div>
+		<div class="slider"></div>
+	</div>
 </template>
 
 <script>
+	export default {
+		data() {
+			return {
+				customerMessage: [
+					{ img: "../static/Customsignaler/icon_touxiangf.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_touxiangf.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_touxiangf.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_touxiangf.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_touxiangf.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_touxiangf.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_touxiangf.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_touxiangf.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_touxiangf.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_touxiangf.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+				],
+				officalMessage: [
+					{ img: "../static/Customsignaler/icon_guanfanglogo.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_guanfanglogo.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_guanfanglogo.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_guanfanglogo.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_guanfanglogo.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_guanfanglogo.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_guanfanglogo.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_guanfanglogo.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_guanfanglogo.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+					{ img: "../static/Customsignaler/icon_guanfanglogo.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
+				],
+			}
+		}
+	}
 </script>
 
 <style lang="scss">
@@ -44,10 +112,100 @@
 	}
 	.customer_box{
 		width: 100%;
+		height: 73px;
+		background:#666;
+		padding-top:27px;
 		.customer_box_top{
-			width: 100%;
-			height: 100px;
+			display:flex;
+			flex-wrap:wrap;
+			justify-content:flex-start;
+			width: 400px;
+			height: 46px;
 			background: #e6e6e6;
+			margin:auto;
+			border-radius:23px;
+			.customer_slider{
+				width:200px;
+				height: 46px;
+				font-size:18px;
+				color: #fff;
+				background:red;
+				line-height: 46px;
+				text-align: center;
+				border-radius: 23px;
+				cursor: pointer;
+			}
 		}
+	}
+	.customer_offical{
+		display: none;
+	}
+	.customer_content{
+		width: 100%;
+		height: 963px;
+		overflow: hidden;
+		.customer_content_list{
+			width: 80%;
+			height: 106px;
+			margin-left: 20%;
+			display:flex;
+			flex-wrap:wrap;
+			justify-content:flex-start;
+			border-bottom:1px solid #E6E6E6;
+			.customer_list_img{
+				width: 60px;
+				height: 60px;
+				margin-top: 28px;
+				margin-right: 20px;
+				background:red;
+				border-radius:50%;
+			}
+			.customer_list_text{
+				width: 60%;
+				height: 50px;
+				margin-top: 36px;
+				display:flex;
+				flex-wrap:wrap;
+				justify-content:flex-start;
+				.customer_list_text_title{
+					width: 100%;
+					font-size: 18px;
+					color: #333333;
+					line-height: 25px;
+					margin-bottom: 5px;
+				}
+				.customer_list_text_anther{
+					width: 25%;
+					font-size: 14px;
+					color: #999999;
+					line-height: 25px;
+				}
+			}
+			.customer_list_money{
+				width: 20%;
+				height: 50px;
+				margin-top: 30px;
+				text-align: center;
+				line-height:50px;
+				font-size: 20px;
+				color: #F5b365;
+			}
+		}
+	}
+	
+	.customer_pag{
+		width: 100%;
+		height: 76px;
+		.pag{
+			width: 30%;
+			height: 36px;
+			margin-left: 60%;
+			margin-top: 30px;
+		}
+	}
+	.slider{
+		width: 100%;
+		height: 20px;
+		background:#e6e6e6;
 	}
 </style>

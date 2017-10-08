@@ -22,6 +22,8 @@ import StrategyAPI from '@/components/views/AICommunity/MyStrategy/StrategyAPI'
 import Shelfsignaler from '@/components/views/Shelfsignal/Shelfsignaler'
 import Shelfsuccess from '@/components/views/Shelfsignal/Shelfsuccess'
 import Customsignaler from '@/components/views/Customsignal/Customsignaler'
+import Smallcapitalization from '@/components/views/Customsignal/Smallcapitalization'
+import Publishsignal from '@/components/views/Customsignal/Publishsignal'
 import Developersignaler from '@/components/views/Developersignal/Developersignaler'
 import Buyersignaler from '@/components/views/Buyersignal/Buyersignaler'
 
@@ -110,6 +112,16 @@ export default new Router({
     			path: 'Customsignaler',
     			name: 'Customsignaler',
     			component: Customsignaler,
+    		},
+    		{
+    			path: 'Smallcapitalization',
+    			name: 'Smallcapitalization',
+    			component: Smallcapitalization,
+    		},
+    		{
+    			path: 'Publishsignal',
+    			name: 'Publishsignal',
+    			component: Publishsignal,
     		},
     		{
     			path: 'Developersignaler',
