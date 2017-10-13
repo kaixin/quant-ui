@@ -132,6 +132,7 @@ export default {
 		.shelf-standard{
 			font-size: 14px;
 			color: #666666;
+			line-height: 30px;
 		}
 		.form{
 			margin-top: 52px;

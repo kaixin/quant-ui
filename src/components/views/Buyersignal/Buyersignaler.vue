@@ -31,10 +31,16 @@
 					<span>{{num.collection}}</span>人收藏
 				</el-col>
 				<el-col :span="4" :offset="8">
-					<el-button style="line-height: 20px;color: #00AEFC;border: 1px solid #00AEFC;"><img src="../../../../static/Buyersignal/icon_weidianjishoucang.png" />收藏</el-button>
+					<el-button style="line-height: 20px;color: #00AEFC;border: 1px solid #00AEFC;" @click="show"><img src="/static/Buyersignal/icon_weidianjishoucang.png" />收藏</el-button>
 				</el-col>
 				<el-col :span="4">
-					<el-button type="primary" style="color: #ffffff;line-height: 20px;"><img src="../../../../static/Buyersignal/icon_fenxiang.png" />分享</el-button>
+					<el-button type="primary" style="color: #ffffff;line-height: 20px;"><img src="/static/Buyersignal/icon_fenxiang.png" />分享</el-button>
+					<div class="buyer-share" v-show="isShow">
+						<span class="buyer-san"></span>
+						<div><img src="/static/Buyersignal/icon_dianjiweixin.png" alt="" />微信</div>
+						<div><img src="/static/Buyersignal/icon_weixin.png" alt="" />微博</div>
+						<div><img src="/static/Buyersignal/icon_dianjixueqiu.png" alt="" />雪球</div>
+					</div>
 				</el-col>
 			</el-row>
 			<div class="Stockmarketstrategy">策略思路：1.不追高:2.威利就走：3.自我学习：4.适应股市震荡</div>
@@ -47,9 +53,17 @@
 					<span class="month-Profit">{{money.name}}</span>
 					<span class="month-num">{{money.num}}</span>
 				</li>
-				<div class="buyer-btn">
+				<div class="buyer-btn" @click="dialogVisible = true">
 					1000元/月，立即订购
 				</div>
+				<el-dialog
+				    title="微信扫码支付"
+				    :visible.sync="dialogVisible"
+				    size="tiny"
+				    >
+				    <img src="/static/we-chat.png" alt="">
+				    <p>支付金额：1111元</p >
+				</el-dialog>
 			</ul>
 			<div class="sinagn-advantage">
 				<span class="sinagn-advantage-title">策略优势：</span>
@@ -60,34 +74,34 @@
 				<div class="buy-man-img">
 					<div class="buyer-head-portrait">
 						<div class="head-portrait">
-							<img src="../../../../static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
+							<img src="/static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
 						</div>
 						<div class="head-portrait">
-							<img src="../../../../static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
+							<img src="/static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
 						</div>
 						<div class="head-portrait">
-							<img src="../../../../static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
+							<img src="/static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
 						</div>
 						<div class="head-portrait">
-							<img src="../../../../static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
+							<img src="/static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
 						</div>
 						<div class="head-portrait">
-							<img src="../../../../static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
+							<img src="/static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
 						</div>
 						<div class="head-portrait">
-							<img src="../../../../static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
+							<img src="/static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
 						</div>
 						<div class="head-portrait">
-							<img src="../../../../static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
+							<img src="/static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
 						</div>
 						<div class="head-portrait">
-							<img src="../../../../static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
+							<img src="/static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
 						</div>
 						<div class="head-portrait">
-							<img src="../../../../static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
+							<img src="/static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
 						</div>
 						<div class="head-portrait">
-							<img src="../../../../static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
+							<img src="/static/Buyersignal/icon_xiangqing_dingbutouxiang.png" />
 						</div>
 					</div>
 					<div class="all-people"></div>
@@ -123,6 +137,9 @@
 	export default {
 		data() {
 			return {
+				dialogVisible:false,
+				isShow:false,
+				name:'vue.js',
 				buyerMessage: [
 					{ img: "../static/Buyersignal/icon_xiangqing_dingbutouxiang.png", name: "不二咚", label: '行情总在绝望中产生，猜疑中成长，欢乐中死亡' },
 				],
@@ -150,6 +167,11 @@
 					{discussionImg:'./static/icon_xiangqing_dingbutouxiang.png',reply:'赵雷',dis_text:'瞬间忆起张爱玲的《爱》 补充：于千万人之中遇到你所要遇到的人，于千万年之中，时间的无涯的荒野中，没有早一步，也没有晚一步，刚巧赶上了，那也没有别的话好说，唯有轻轻的问一声：“噢，你也在这里吗？”'},
 					{discussionImg:'./static/icon_xiangqing_dingbutouxiang.png',reply:'张碧晨',dis_text:'以前高中打游戏。 经常去网吧通宵。 前面坐个长发妹子。 很长的那种。 每次玩上课睡觉她总会把扎着头发放开 。 多年后同学会发现她剪了短发。 依然那么漂亮。 问她为什么剪了。 她说其实她不喜欢留长头发。 留长头发是为了她后面经常熬夜的少年能够睡个安稳觉不被老师发现。现在不见多年。”'}
 				]
+			}
+		},
+		methods:{
+			show:function(){
+				alert(123);
 			}
 		}
 	}
@@ -208,6 +230,38 @@
 			border-radius: 4px;
 			font-size: 14px;
 			color: #999999;
+			position: relative;
+			.buyer-share{
+				width: 88px;
+				height: 96px;
+				position: absolute;
+				top: 50px;
+				left: 10px;
+				padding: 20px 10px;
+				border:1px solid #999;
+				border-radius:4px;
+				span{
+					display: inline-block;
+					width: 0;
+				    height: 0;
+				    border-left: 10px solid transparent;
+				    border-right: 10px solid transparent;
+				    border-bottom: 10px solid #999;
+				    position: absolute;
+				    top: -10px;
+				    left: 30px;
+				}
+				div{
+					font-size: 14px;
+					color: #666666;
+					line-height: 29px;
+					img{
+						display: inline-block;
+						margin-left: 10px;
+						margin-right: 10px;
+					}
+				}
+			}
 		}
 		.bg-purple-dark {
 			background: #99a9bf;
@@ -252,7 +306,7 @@
 			}
 		}
 		.buyer-text-box {
-			width: 1170px;
+			width: 1200px;
 			border: 1px solid red;
 			height: 200px;
 		}
@@ -356,7 +410,7 @@
 			width: 100%;
 			height: 62px;
 			display: inline-block;
-			/*margin:30px auto 0;*/
+			margin:30px auto 0;
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: flex-start;
@@ -488,6 +542,20 @@
 				width: 100%;
 				height: 40px;
 			}
+		}
+	}
+	.el-dialog--tiny{
+		width: 12%;
+		.el-dialog__header{
+			.el-dialog__title{
+				display: inline-block;
+				margin-left: 15%;
+			}
+		}
+		.el-dialog__body{
+			display: inline-block;
+			margin-left:10%;
+			
 		}
 	}
 </style>

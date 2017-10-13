@@ -24,6 +24,8 @@ import Shelfsuccess from '@/components/views/Shelfsignal/Shelfsuccess'
 import Customsignaler from '@/components/views/Customsignal/Customsignaler'
 import Smallcapitalization from '@/components/views/Customsignal/Smallcapitalization'
 import Publishsignal from '@/components/views/Customsignal/Publishsignal'
+import Customizeddetails from '@/components/views/Customsignal/Customizeddetails'
+import Officialdetails from '@/components/views/Customsignal/Officialdetails'
 import Developersignaler from '@/components/views/Developersignal/Developersignaler'
 import Buyersignaler from '@/components/views/Buyersignal/Buyersignaler'
 
@@ -122,6 +124,16 @@ export default new Router({
     			path: 'Publishsignal',
     			name: 'Publishsignal',
     			component: Publishsignal,
+    		},
+    		{
+    			path: 'Customizeddetails',
+    			name: 'Customizeddetails',
+    			component: Customizeddetails,
+    		},
+    		{
+    			path: 'Officialdetails',
+    			name: 'Officialdetails',
+    			component: Officialdetails,
     		},
     		{
     			path: 'Developersignaler',
