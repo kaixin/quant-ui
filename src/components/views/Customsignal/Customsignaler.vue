@@ -8,11 +8,11 @@
 		</div>
 		<div class="customer_box">
 			<div class="customer_box_top">
-				<div class="customer_slider customer_box_left">客户定制活动</div>
-				<div class="customer_slider customer_box_right">官方征集活动</div>
+				<div class="customer_slider customer_box_left" @click="custom_left" >客户定制活动</div>
+				<div class="customer_slider customer_box_right" @click="custom_right" >官方征集活动</div>
 			</div>
 		</div>
-		<div class="customer_content customer_cus" >
+		<div class="customer_content customer_cus" v-show="isShow">
 			<div class="customer_content_list" v-for="obj in customerMessage">
 				<div class="customer_list_img"><img :src="obj.img" /></div>
 				<div class="customer_list_text">
@@ -24,7 +24,7 @@
 				<div class="customer_list_money">报价: <span>{{obj.money}}</span></div>
 			</div>
 		</div>
-		<div class="customer_content customer_offical" >
+		<div class="customer_content customer_offical" v-show="isHide">
 			<div class="customer_content_list" v-for="obj in officalMessage">
 				<div class="customer_list_img"><img :src="obj.img" /></div>
 				<div class="customer_list_text">
@@ -38,14 +38,14 @@
 		</div>
 		<div class="customer_pag">
 			<div class="pag">
-				<el-pagination
+				<!--<el-pagination
 			      @size-change="handleSizeChange"
 			      @current-change="handleCurrentChange"
 			      :current-page.sync="currentPage3"
 			      :page-size="100"
 			      layout="prev, pager, next, jumper"
 			      :total="1000">
-			    </el-pagination>
+			    </el-pagination>-->
 			</div>
 		</div>
 		<div class="slider"></div>
@@ -56,6 +56,11 @@
 	export default {
 		data() {
 			return {
+				isShow:true,
+				isHide:false,
+				isFalse:true,
+				isTrue:true,
+				isFalse:false,
 				customerMessage: [
 					{ img: "../static/Customsignaler/icon_touxiangf.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
 					{ img: "../static/Customsignaler/icon_touxiangf.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
@@ -81,6 +86,17 @@
 					{ img: "../static/Customsignaler/icon_guanfanglogo.png", title: "需要解决怎样看量化问题", author: '小小',num:'12',time:'2017.09.15',money:'15元'},
 				],
 			}
+		},
+		methods:{
+			custom_left:function(){
+				this.isShow = true;
+				this.isHide = false;
+
+			},
+			custom_right:function(){
+				this.isHide = true;
+				this.isShow = false;
+			},
 		}
 	}
 </script>
@@ -113,7 +129,7 @@
 	.customer_box{
 		width: 100%;
 		height: 73px;
-		background:#666;
+		background:#e6e6e6;
 		padding-top:27px;
 		.customer_box_top{
 			display:flex;
@@ -121,24 +137,29 @@
 			justify-content:flex-start;
 			width: 400px;
 			height: 46px;
-			background: #e6e6e6;
+			background: #ffffff;
 			margin:auto;
 			border-radius:23px;
 			.customer_slider{
 				width:200px;
 				height: 46px;
 				font-size:18px;
-				color: #fff;
-				background:red;
 				line-height: 46px;
 				text-align: center;
 				border-radius: 23px;
 				cursor: pointer;
+				background: #fff;
+				color:#333;
+			}
+			.customer_box_left{
+				background:#14aaff;
+				color: #fff;
+			}
+			.customer_box_right{
+				background:#14aaff;
+				color: #fff;
 			}
 		}
-	}
-	.customer_offical{
-		display: none;
 	}
 	.customer_content{
 		width: 100%;

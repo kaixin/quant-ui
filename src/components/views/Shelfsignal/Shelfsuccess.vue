@@ -36,7 +36,6 @@
 		height: 62px;
 		background: #e6e6e6;
 		margin-bottom: 42px;
-		padding-left: 15%;
 		img {
 			display: inline-block;
 			margin-top: 24px;

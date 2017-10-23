@@ -31,10 +31,10 @@
 					<span>{{num.collection}}</span>人收藏
 				</el-col>
 				<el-col :span="4" :offset="8">
-					<el-button style="line-height: 20px;color: #00AEFC;border: 1px solid #00AEFC;" @click="show"><img src="/static/Buyersignal/icon_weidianjishoucang.png" />收藏</el-button>
+					<el-button style="line-height: 20px;color: #00AEFC;border: 1px solid #00AEFC;"@click="show"><span v-bind:class="{'hollow':isA,'solid':isB}"></span>收藏</el-button>
 				</el-col>
 				<el-col :span="4">
-					<el-button type="primary" style="color: #ffffff;line-height: 20px;"><img src="/static/Buyersignal/icon_fenxiang.png" />分享</el-button>
+					<el-button type="primary" style="color: #ffffff;line-height: 20px;" @click="toggle()"><img src="/static/Buyersignal/icon_fenxiang.png" style="margin-right: 10px;margin-left: 10px;"/>分享</el-button>
 					<div class="buyer-share" v-show="isShow">
 						<span class="buyer-san"></span>
 						<div><img src="/static/Buyersignal/icon_dianjiweixin.png" alt="" />微信</div>
@@ -56,13 +56,83 @@
 				<div class="buyer-btn" @click="dialogVisible = true">
 					1000元/月，立即订购
 				</div>
-				<el-dialog
+				<!--支付二维码-->
+				<!--<el-dialog
 				    title="微信扫码支付"
 				    :visible.sync="dialogVisible"
 				    size="tiny"
 				    >
 				    <img src="/static/we-chat.png" alt="">
 				    <p>支付金额：1111元</p >
+				</el-dialog>-->
+				
+				<!--插入图片-->
+				<!--<el-dialog
+				    title="插入图片"
+				    :visible.sync="dialogVisible"
+				    size="tiny"
+				    custom-class="select-img"
+				    >
+				    <div class="slider"></div>
+				    <el-upload
+					  class="upload-demo"
+					  ref="upload"
+					  action="https://jsonplaceholder.typicode.com/posts/"
+					  :on-preview="handlePreview"
+					  :on-remove="handleRemove"
+					  :file-list="fileList"
+					  :auto-upload="false">
+					  <el-button slot="trigger" size="small" >选取文件</el-button> 
+					</el-upload>
+					<div class="el-dislong-btn">
+					  	<button class="remove">取消</button>
+					  	<button class="add">提交</button>
+					</div>
+				</el-dialog>-->
+				<!--<el-dialog
+					 title="插入链接"
+				    :visible.sync="dialogVisible"
+				    size="tiny"
+				    custom-class="link"
+				    >
+					<div class="link-slider"></div>
+					<div class="link-box">
+						<p>链接地址</p>
+						<input type="text" />
+						<span>http://</span>
+					</div>
+					<div class="link-bag">
+						<p>描述</p>
+						<textarea name="" rows="" cols=""></textarea>
+					</div>
+					<div class="link-btn">
+						<button class="link-remove">取消</button>
+						<button class="link-add">提交</button>
+					</div>
+				</el-dialog>-->
+				<el-dialog
+					title="选择回测"
+				    :visible.sync="dialogVisible"
+				    size="tiny"
+				    custom-class="backprobe"
+					>
+					<div class="back-slider"></div>
+					<div class="strategy">
+						<span>选择策略</span>
+						<select name="" id="">
+							<option value="">请选择一个策略</option>
+						</select>
+					</div>
+					<div class="strategy">
+						<span class=".hc">选择回测</span>
+						<select name="" id="">
+							<option value="">请选择一个回测</option>
+						</select>
+					</div>
+					<span slot="footer" class="dialog-footer">
+						<el-button @click="dialogVisible = false">取消</el-button>
+						<el-button type="primary" @click="dialogVisible = false">提交</el-button>
+					</span>
 				</el-dialog>
 			</ul>
 			<div class="sinagn-advantage">
@@ -139,7 +209,11 @@
 			return {
 				dialogVisible:false,
 				isShow:false,
-				name:'vue.js',
+				isA:true,
+				isB:false,
+				fileList: [
+					{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, 
+				],
 				buyerMessage: [
 					{ img: "../static/Buyersignal/icon_xiangqing_dingbutouxiang.png", name: "不二咚", label: '行情总在绝望中产生，猜疑中成长，欢乐中死亡' },
 				],
@@ -169,9 +243,23 @@
 				]
 			}
 		},
+		methods: {
+	      submitUpload() {
+	        this.$refs.upload.submit();
+	      },
+	      handleRemove(file, fileList) {
+	        console.log(file, fileList);
+	      },
+	      handlePreview(file) {
+	        console.log(file);
+	      }
+	    },
 		methods:{
 			show:function(){
 				alert(123);
+			},
+			toggle:function(){
+				this.isShow = !this.isShow;
 			}
 		}
 	}
@@ -255,6 +343,7 @@
 					font-size: 14px;
 					color: #666666;
 					line-height: 29px;
+					cursor: pointer;
 					img{
 						display: inline-block;
 						margin-left: 10px;
@@ -284,9 +373,25 @@
 			width: 108px;
 			height: 38px;
 			font-size: 16px;
-			img {
+			line-height: 20px;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: flex-start;
+			.hollow{
 				display: inline-block;
-				margin-right: 10px;
+				width: 27px;
+				height: 17px;
+				margin-left: 10px;
+				background: url(/static/Buyersignal/icon_weidianjishoucang.png) no-repeat;
+				background: cover;
+			}
+			.solid{
+				display: inline-block;
+				width: 27px;
+				height: 17px;
+				margin-left: 10px;
+				background: url(/static/Buyersignal/icon_shoucangdianji.png) no-repeat;
+				background: cover;
 			}
 		}
 		.Stockmarketstrategy {
@@ -520,7 +625,7 @@
 					font-size: 14px;
 					color: #00AEFC;
 					margin-left: 12px;
-					
+					cursor: pointer;
 				}
 			}
 		}
@@ -544,7 +649,7 @@
 			}
 		}
 	}
-	.el-dialog--tiny{
+	/*.el-dialog--tiny{
 		width: 12%;
 		.el-dialog__header{
 			.el-dialog__title{
@@ -556,6 +661,166 @@
 			display: inline-block;
 			margin-left:10%;
 			
+		}
+	}*/
+	.select-img{
+		width: 412px;
+		height: 260px;
+		border-radius: 8px;
+		.slider{
+			width: 390px;
+			height: 1px;
+			background: black;
+		}
+		.el-upload-list__item:before{
+			display: none;
+			
+		}
+		.el-upload-list__item{
+			border-bottom: 1px solid gray;
+		}
+		.el-button--small{
+			border: none;
+			color: #14AAFF;
+			font-size: 14px;
+		}
+		.el-dislong-btn{
+			width:100%;
+			height: 40px;
+			margin-top: 50px;
+			button{
+				width: 110px;
+				height: 40px;
+				border-radius: 4px;
+				color: #fff;
+				font-size: 16px;
+			}
+			.remove{
+				background: #fff;
+				border:1px solid #B4B4B4;
+				margin-right:100px;
+				margin-left: 10px;
+				color: #333;
+			}
+			.add{
+				background: #20A0FF;
+				border: none;
+			}
+		}
+	}
+	input{
+		border: none;
+	}
+	.link{
+		width: 412px;
+		height: 400px;
+		border-radius: 8px;
+		.el-dialog__title{
+				color: #333;
+				font-size: 18px;
+			}
+		.link-slider{
+			width: 380px;
+			height: 1px;
+			background: #666666;
+		}
+		.link-box{
+			font-size: 16px;
+			color: #333;
+			position: relative;
+			
+			input{
+				border-bottom: 1px solid #666;
+				width: 350px;
+				height: 25px;
+				text-indent: 50px;
+				font-size: 14px;
+			}
+			span{
+				width: 50px;
+				height: 25px;
+				position: absolute;
+				top: 40px;
+				left: 0;
+				font-size: 14px;
+			}
+		}
+		.link-bag{
+			width: 400px;
+			textarea{
+				width: 350px;
+				height: 92px;
+				background: #F5F5F5;
+				border-radius: 4px;
+			}
+		}
+		.link-btn{
+				width:100%;
+				height: 40px;
+				margin-top: 20px;
+				button{
+					width: 110px;
+					height: 40px;
+					border-radius: 4px;
+					color: #fff;
+					font-size: 16px;
+				}
+				.link-remove{
+					background: #fff;
+					border:1px solid #B4B4B4;
+					margin-right:100px;
+					margin-left: 10px;
+					color: #333;
+				}
+				.link-add{
+					background: #20A0FF;
+					border: none;
+				}
+			}
+	}
+	select{
+		border: none;
+	}
+	button{
+		border: none;
+		background: #fff;
+	}
+	.backprobe{
+		width: 372px;
+		height: 300px;
+		border-radius: 8px;
+		padding: 0 20px;
+		position: relative;
+		.back-slider{
+			width: 372px;
+			height: 1px;
+			background: #666666;
+			position: absolute;
+			top: 60px;
+			left: 0;
+		}
+		.strategy{
+			width: 100%;
+			height: 70px;
+			.hc{
+				display: inline-block;
+				font-size: 16px;
+				color: #333333;
+				margin-bottom: 10px;
+			}
+			select{
+				width: 100%;
+				height: 30px;
+				border-bottom: 1px solid #B4B4B4;
+				color: #B4B4B4;
+			}
+		}
+		.el-dialog__footer{
+			margin-top: -20px;
+			text-align: center;
+			.el-button{
+				display: inline-block;
+			}
 		}
 	}
 </style>

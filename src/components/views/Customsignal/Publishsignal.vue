@@ -43,8 +43,20 @@
 			  </div>
 			</div>
 			<div class="shelf-btn">
-				<el-button type="primary" @click="open">提交</el-button>
+				<el-button type="primary" @click="dialogVisible = true">提交</el-button>
 			</div>
+			<el-dialog
+			  :visible.sync="dialogVisible"
+			  size="tiny"
+			  custom-class="publish-box"
+			  >
+			  <p>你的需求已发布成功，请耐心</p>
+			  <p>等待大牛的报名</p>
+			  <span slot="footer" class="dialog-footer">
+			    <el-button @click="dialogVisible = false">返回信号商城</el-button>
+			    <el-button type="primary" @click="dialogVisible = false">参看发布需求</el-button>
+			  </span>
+			</el-dialog>
 		</form>
  		</div>
  		<div class="gray"></div>
@@ -53,24 +65,9 @@
 
 <script>
 	 export default {
-	 	methods: {
-	      open() {
-	        const h = this.$createElement;
-	        this.$msgbox({
-	          title: '您的需求已发布，请耐心等待大牛的报名',
-	          message: h('p', null, [
-	            
-	          ]),
-	          showCancelButton: true,
-	          confirmButtonText: '查看发布的需求',
-	          cancelButtonText: '返回信号商城',
-	        }).then(action => {
-	          
-	        });
-	      },
-	    },
 	    data() {
 	      return {
+	      	dialogVisible:false,
 	        pickerOptions1: {
           shortcuts: [{
             text: '今天',
@@ -101,6 +98,10 @@
 </script>
 
 <style lang="scss">
+	*{
+		margin: 0;
+		padding: 0;
+	}
 	input{
 		border: none;
 	}
@@ -229,14 +230,18 @@
 		height: 20px;
 		background: #e6e6e6;
 	}
-	.el-message-box{
-		.el-message-box__title{
-			margin: auto;
-			width: 50%;
+	.publish-box{
+		width: 416px;
+		height: 208px;
+		border-radius: 6px;
+		p{
+			width: 100%;
+			line-height: 20px;
 			text-align: center;
-			line-height: 30px;
+			font-size: 16px;
+			color: #333;
 		}
-		.el-message-box__btns{
+		.el-dialog__footer{
 			text-align: center;
 		}
 	}

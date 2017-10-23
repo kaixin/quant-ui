@@ -25,6 +25,7 @@ import Customsignaler from '@/components/views/Customsignal/Customsignaler'
 import Smallcapitalization from '@/components/views/Customsignal/Smallcapitalization'
 import Publishsignal from '@/components/views/Customsignal/Publishsignal'
 import Customizeddetails from '@/components/views/Customsignal/Customizeddetails'
+import Customtable from '@/components/views/Customsignal/Customtable'
 import Officialdetails from '@/components/views/Customsignal/Officialdetails'
 import Developersignaler from '@/components/views/Developersignal/Developersignaler'
 import Buyersignaler from '@/components/views/Buyersignal/Buyersignaler'
@@ -129,6 +130,11 @@ export default new Router({
     			path: 'Customizeddetails',
     			name: 'Customizeddetails',
     			component: Customizeddetails,
+    		},
+    		{
+    			path: 'Customtable',
+    			name: 'Customtable',
+    			component: Customtable,
     		},
     		{
     			path: 'Officialdetails',
