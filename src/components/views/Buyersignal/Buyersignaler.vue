@@ -45,7 +45,7 @@
 			</el-row>
 			<div class="Stockmarketstrategy">策略思路：1.不追高:2.威利就走：3.自我学习：4.适应股市震荡</div>
 			<div class="zoom"><span>缩放：</span><span>1个月 </span><span>1年</span><span>全部</span></div>
-			<div class="buyer-text-box">
+			<div class="buyer-text-box" id="buyer-text-box">
 				曲线图
 			</div>
 			<ul class="buyer-text-table">
@@ -202,7 +202,6 @@
 		<div class="buyer-middle"></div>
 	</div>
 </template>
-
 <script>
 	export default {
 		data() {
@@ -252,16 +251,14 @@
 	      },
 	      handlePreview(file) {
 	        console.log(file);
-	      }
-	    },
-		methods:{
-			show:function(){
+	      },
+	      show:function(){
 				alert(123);
 			},
-			toggle:function(){
+		  toggle:function(){
 				this.isShow = !this.isShow;
 			}
-		}
+	  },
 	}
 </script>
 
